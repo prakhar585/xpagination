@@ -1,58 +1,50 @@
-import React, { useState, useEffect } from 'react'
-import './CustomTable.css';
+import React, { useState, useEffect } from "react";
+import "./CustomTable.css";
 
 const CustomTable = ({ employeeData, currentPage }) => {
-  const [paginationData , setpaginationData] = useState([]);
-  
-   
-    useEffect(()=>{
-        const calculateList =(employeeData, currentPage)=>{
-          
-          if(!employeeData || employeeData.length === 0){
-            return;
-          }
+  const [paginationData, setpaginationData] = useState([]);
 
-          let newData = [];
+  useEffect(() => {
+    const calculateList = (employeeData, currentPage) => {
+      if (!employeeData || employeeData.length === 0) {
+        return [];
+      }
 
-          if(currentPage === 1){
-            newData = employeeData.slice(0,10);
-          }else{
-            let startIndex = (currentPage-1)*10;
-            let endIndex = Math.min(startIndex+10, employeeData.length);
-            newData = employeeData.slice(startIndex,endIndex);
-          }
+      let startIndex = (currentPage - 1) * 10;
+      let endIndex = Math.min(startIndex + 10, employeeData.length);
+      return employeeData.slice(startIndex, endIndex);
 
+      
+    };
 
-          setpaginationData(newData);
-         
-        }
-        
-        
-        calculateList(employeeData, currentPage);
-        console.log(`ans is `,paginationData);
+    setpaginationData(calculateList(employeeData, currentPage));
 
+  }, [employeeData, currentPage]);
 
-    },[employeeData, currentPage])
-    
-    return (
+  return (
     <div>
-        <table className='table'>
-            <tr className='table-heading'>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
+      <table className="table">
+        <thead>
+          <tr className="table-heading">
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          {paginationData.map((item) => (
+            <tr className="table-row">
+              <td>{item.id}</td>
+              <td>{item.name}</td>
+              <td>{item.email}</td>
+              <td>{item.role}</td>
             </tr>
-            {paginationData.map((item)=>(<tr className='table-row'>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.email}</td>
-                <td>{item.role}</td>
-            </tr>))}
-        </table>
-        
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
-}
+  );
+};
 
-export default CustomTable
+export default CustomTable;
